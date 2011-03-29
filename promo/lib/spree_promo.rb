@@ -3,6 +3,8 @@ require 'spree_promo_hooks'
 
 module SpreePromo
   class Engine < Rails::Engine
+
+    @@first_activate = true
     def self.activate
       # put class_eval and other logic that depends on classes outside of the engine inside this block
       Product.class_eval do
@@ -117,6 +119,28 @@ module SpreePromo
           end
         }
       end
+
+
+      # Fetch matching activators for all Spree events
+      if @@first_activate
+        ActiveSupport::Notifications.subscribe(/^spree/) do |*args|
+          puts '-'*100
+          puts '-'*100
+          puts ' spree. event '
+          # puts args.inspect
+          name, start_time, end_time, id, payload = args
+          puts "name: #{name}"
+
+          Activator.event_name_starts_with(name).each do |activator|
+            activator.activate(payload)
+          end
+
+          puts '-'*100
+          puts '-'*100
+        end
+      end
+
+      @@first_activate = false
     end
 
     config.autoload_paths += %W(#{config.root}/lib)
