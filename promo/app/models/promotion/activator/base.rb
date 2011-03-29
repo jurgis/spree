@@ -1,4 +1,5 @@
-class Activator < ActiveRecord::Base
+class Promotion::Activator::Base < ActiveRecord::Base
+  set_table_name 'activators'
 
   belongs_to :promotion
 
@@ -8,3 +9,4 @@ class Activator < ActiveRecord::Base
   end
 
 end
+
