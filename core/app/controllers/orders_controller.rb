@@ -45,7 +45,7 @@ class OrdersController < Spree::BaseController
       @order.add_variant(Variant.find(variant_id), quantity) if quantity > 0
     end if params[:variants]
 
-    ActiveSupport::Notifications.instrument('spree.cart.add', :order => @order)
+    ActiveSupport::Notifications.instrument('spree.cart.add', default_notification_payload.merge(:order => @order))
 
     redirect_to cart_path
   end

@@ -100,6 +100,28 @@ module SpreePromo
         end
       end
 
+
+
+      # Keep a record ot all static page paths visited for promotions that require them
+      ContentController.class_eval do
+        after_filter :store_visited_path
+        def store_visited_path
+          session[:visited_paths] ||= []
+          session[:visited_paths] = (session[:visited_paths]  + [params[:path]]).uniq
+        end
+      end
+
+      # Include list of visited paths in notification payload hash
+      SpreeBase::InstanceMethods.class_eval do
+        def default_notification_payload
+          {:current_user => current_user, :visited_paths => session[:visited_paths]}
+        end
+      end
+
+
+
+
+
       if File.basename( $0 ) != "rake"
         # register promotion rules
         [Promotion::Rules::ItemTotal, Promotion::Rules::Product, Promotion::Rules::User, Promotion::Rules::FirstOrder].each &:register
@@ -123,20 +145,11 @@ module SpreePromo
 
       # Fetch matching activators for all Spree events
       if @@first_activate
-        ActiveSupport::Notifications.subscribe(/^spree/) do |*args|
-          puts '-'*100
-          puts '-'*100
-          puts ' spree. event '
-          # puts args.inspect
+        ActiveSupport::Notifications.subscribe(/^spree\./) do |*args|
           name, start_time, end_time, id, payload = args
-          puts "name: #{name}"
-
-          Activator.event_name_starts_with(name).each do |activator|
+          Promotion::Activator::Base.event_name_starts_with(name).each do |activator|
             activator.activate(payload)
           end
-
-          puts '-'*100
-          puts '-'*100
         end
       end
 

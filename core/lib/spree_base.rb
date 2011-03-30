@@ -58,6 +58,14 @@ module SpreeBase
       end
     end
 
+
+    # Creates the hash that is sent as the payload for all notifications. Specific notifications will
+    # add additional keys as appropriate. Override this method if you need additional data when
+    # responding to a notification
+    def default_notification_payload
+      {:current_user => current_user}
+    end
+
     private
 
     def redirect_back_or_default(default)

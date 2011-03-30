@@ -18,6 +18,7 @@ class UserRegistrationsController < Devise::RegistrationsController
     logger.debug(@user)
     if resource.save
       set_flash_message(:notice, :signed_up)
+      ActiveSupport::Notifications.instrument('spree.user.signup', default_notification_payload.merge(:user => @user))
       sign_in_and_redirect(:user, @user)
     else
       clean_up_passwords(resource)
