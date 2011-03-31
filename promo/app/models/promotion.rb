@@ -1,5 +1,5 @@
-class Promotion < ActiveRecord::Base
-  has_many  :promotion_credits,    :as => :source
+class Promotion < Activator
+  has_many  :promotion_credits, :as => :source
   calculated_adjustments
   alias credits promotion_credits
 
@@ -19,17 +19,8 @@ class Promotion < ActiveRecord::Base
 
   MATCH_POLICIES = %w(all any)
 
-  scope :automatic, where("code IS NULL OR code = ''")
-  scope :manual, where("code IS NOT NULL AND code <> ''")
-
   def eligible?(order)
     !expired? && rules_are_eligible?(order)
-  end
-
-  def expired?
-    starts_at && Time.now < starts_at ||
-    expires_at && Time.now > expires_at ||
-    usage_limit && credits_count >= usage_limit
   end
 
   def credits_count
