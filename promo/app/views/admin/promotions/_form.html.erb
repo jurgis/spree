@@ -11,14 +11,9 @@
     <%= f.text_area :description, :style => "height:50px" %>
   <% end %>
 
-  <%= f.field_container :code do %>
-    <%= f.label :code %><br />
-    <%= f.text_field :code %>
-  <% end %>
-
-  <%= f.field_container :combine do %>
+  <%= f.field_container :preferred_combine do %>
     <label>
-      <%= f.check_box :combine %> 
+      <%= f.check_box :preferred_combine %>
       <%= t(:may_be_combined_with_other_promotions) %>
     </label>
   <% end %>
@@ -28,8 +23,8 @@
 <fieldset id="expiry_fields">
   <legend><%= t(:expiry) %></legend>
   <p>
-    <%= f.label :usage_limit %><br />
-    <%= f.text_field :usage_limit %>
+    <%= f.label :preferred_usage_limit %><br />
+    <%= f.text_field :preferred_usage_limit %>
   </p>
 
   <p id="starts_at_field">
