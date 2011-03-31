@@ -37,7 +37,10 @@ en:
       description: Order total meets these criteria
     first_order:
       name: First order
-      description: Must be the customer's first order
+      description: "Must be the customer's first order"
+    landing_page:
+      name: Landing Page
+      description: Customer must have visited the specified page
   product_rule:
     choose_products: Choose products
     label: "Order must contain %{select} of these products"
@@ -53,3 +56,5 @@ en:
     operators:
       gt: greater than
       gte: greater than or equal to
+  landing_page_rule:
+    path: Path
