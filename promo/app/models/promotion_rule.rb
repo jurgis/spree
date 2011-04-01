@@ -5,7 +5,7 @@ class PromotionRule < ActiveRecord::Base
 
   scope :of_type, lambda {|t| {:conditions => {:type => t}}}
 
-  def eligible?(order)
+  def eligible?(order, options = {})
     raise 'eligible? should be implemented in a sub-class of Promotion::PromotionRule'
   end
 

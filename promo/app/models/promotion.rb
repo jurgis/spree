@@ -32,20 +32,27 @@ class Promotion < Activator
   end
 
 
-  def eligible?(order)
-    !expired? && rules_are_eligible?(order)
+  def activate(payload)
+    order = payload.delete(:order)
+    if eligible?(order, payload)
+      # TODO: perform promotion actions here
+    end
+  end
+
+  def eligible?(order, options = {})
+    !expired? && rules_are_eligible?(order, options = {})
   end
 
   def credits_count
     credits.with_order.count
   end
 
-  def rules_are_eligible?(order)
+  def rules_are_eligible?(order, options = {})
     return true if rules.none?
     if match_policy == 'all'
-      rules.all?{|r| r.eligible?(order)}
+      rules.all?{|r| r.eligible?(order, options)}
     else
-      rules.any?{|r| r.eligible?(order)}
+      rules.any?{|r| r.eligible?(order, options)}
     end
   end
 
