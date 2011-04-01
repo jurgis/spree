@@ -10,6 +10,7 @@ class OrdersController < Spree::BaseController
     @order = current_order
     if @order.update_attributes(params[:order])
       @order.line_items = @order.line_items.select {|li| li.quantity > 0 }
+      fire_event('spree.order.contents_changed')
       redirect_to cart_path
     else
       render :edit
@@ -45,7 +46,8 @@ class OrdersController < Spree::BaseController
       @order.add_variant(Variant.find(variant_id), quantity) if quantity > 0
     end if params[:variants]
 
-    ActiveSupport::Notifications.instrument('spree.cart.add', default_notification_payload.merge(:order => @order))
+    fire_event('spree.cart.add')
+    fire_event('spree.order.contents_changed')
 
     redirect_to cart_path
   end

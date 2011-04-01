@@ -27,18 +27,19 @@ module SpreePromo
 
         attr_accessible :coupon_code
         attr_accessor :coupon_code
-        before_save :process_coupon_code, :if => "@coupon_code.present?"
+
+        # before_save :process_coupon_code, :if => "@coupon_code"
 
         def promotion_credit_exists?(credit)
           promotion_credits.reload.detect { |c| c.source_id == credit.id }
         end
 
-        def process_coupon_code
-          coupon = Promotion.find(:first, :conditions => ["UPPER(code) = ?", @coupon_code.upcase])
-          if coupon
-            coupon.create_discount(self)
-          end
-        end
+        # def process_coupon_code
+        #   coupon = Promotion.find(:first, :conditions => ["UPPER(code) = ?", @coupon_code.upcase])
+        #   if coupon
+        #     coupon.create_discount(self)
+        #   end
+        # end
 
         def products
           line_items.map {|li| li.variant.product}
@@ -59,6 +60,10 @@ module SpreePromo
 
           self.adjustment_total = self.adjustments.map(&:amount).sum
           self.total            = self.item_total   + self.adjustment_total
+        end
+
+        # TODO: Remove promotions that are no longer eligible
+        def check_promotion_eligibility
         end
 
         # def process_automatic_promotions
