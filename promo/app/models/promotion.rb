@@ -9,8 +9,9 @@ class Promotion < Activator
   preference :combine, :boolean, :default => false
   preference :usage_limit, :integer
   preference :match_policy, :string, :default => MATCH_POLICIES.first
+  preference :code, :string
 
-  [:combine, :usage_limit, :match_policy].each do |field|
+  [:combine, :usage_limit, :match_policy, :code].each do |field|
     alias_method field, "preferred_#{field}"
     alias_method "#{field}=", "preferred_#{field}="
   end

@@ -58,6 +58,11 @@ module SpreeCore
       if @@first_activate
         ActiveSupport::Notifications.subscribe(/^spree\./) do |*args|
           name, start_time, end_time, id, payload = args
+          puts '='*100
+          puts '='*100
+          puts "Event: #{name}"
+          puts '='*100
+          puts '='*100
           Activator.event_name_starts_with(name).each do |activator|
             activator.activate(payload)
           end

@@ -6,6 +6,11 @@
     <%= f.text_field :name %>
   <% end %>
 
+  <%= f.field_container :preferred_code do %>
+    <%= f.label :preferred_code, t(:code) %><br />
+    <%= f.text_field :preferred_code %>
+  <% end %>
+
   <%= f.field_container :description do %>
     <%= f.label :description %><br />
     <%= f.text_area :description, :style => "height:50px" %>
