@@ -1,0 +1,6 @@
+jQuery('#actions').append('<%= escape_javascript( render(:partial => 'admin/promotions/promotion_action', :object => @promotion_action) ) %>');
+jQuery('#<%= dom_id @promotion_action %>').hide();
+jQuery('#<%= dom_id @promotion_action %>').fadeIn();
+initProductactionSourceField();
+jQuery('#<%= dom_id @promotion_action %> .tokeninput.products').productPicker();
+

@@ -1,4 +1,4 @@
-.promotion-rule {
+.promotion-rule, .promotion-action {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   padding: 8px 40px 8px 10px;
@@ -7,7 +7,7 @@
   margin-bottom: 4px;
   position: relative;
 }
-.promotion-rule .delete {
+.promotion-rule .delete, .promotion-action .delete {
   display: block;
   position: absolute;
   right: 10px;
@@ -45,10 +45,11 @@
 #rule_fields {
 	position: relative;
 }
-#new_product_rule_form {
+#new_product_rule_form, #new_promotion_action_form {
 	position: absolute;
 	text-align:right;
 	width: 300px;
 	right: 30px;
 	bottom: 20px;
 }
+

@@ -17,10 +17,13 @@ class Promotion < Activator
   end
 
 
-
   has_many :promotion_rules, :foreign_key => 'activator_id', :autosave => true
-  accepts_nested_attributes_for :promotion_rules
   alias_method :rules, :promotion_rules
+  accepts_nested_attributes_for :promotion_rules
+
+  has_many :promotion_actions, :foreign_key => 'activator_id', :autosave => true
+  alias_method :actions, :promotion_actions
+  accepts_nested_attributes_for :promotion_actions
 
   validates :name, :presence => true
 

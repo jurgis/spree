@@ -110,8 +110,16 @@ module SpreePromo
 
 
       if File.basename( $0 ) != "rake"
-        # register promotion rules
-        [Promotion::Rules::ItemTotal, Promotion::Rules::Product, Promotion::Rules::User, Promotion::Rules::FirstOrder, Promotion::Rules::LandingPage].each &:register
+        # register promotion rules and actions
+        [Promotion::Rules::ItemTotal,
+         Promotion::Rules::Product,
+         Promotion::Rules::User,
+         Promotion::Rules::FirstOrder,
+         Promotion::Rules::LandingPage,
+         Promotion::Actions::CreateAdjustment,
+         Promotion::Actions::GiveStoreCredit,
+         Promotion::Actions::CreateLineItems
+        ].each &:register
 
         # register default promotion calculators
         [
