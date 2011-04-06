@@ -1,5 +1,6 @@
 class Admin::PromotionActionsController < Admin::BaseController
   def create
+    @calculators = Promotion.calculators
     @promotion = Promotion.find(params[:promotion_id])
     @promotion_action = params[:promotion_action][:type].constantize.new(params[:promotion_action])
     @promotion_action.promotion = @promotion

@@ -1,4 +1,10 @@
-jQuery('#actions').append('<%= escape_javascript( render(:partial => 'admin/promotions/promotion_action', :object => @promotion_action) ) %>');
+<% if false %>
+jQuery('#actions').append('<%#= escape_javascript( render(:partial => 'admin/promotions/promotion_action', :object => @promotion_action) ) %>');
+<% end %>
+
+
+jQuery('#actions_container').html('<%= escape_javascript( render(:partial => 'admin/promotions/actions') ) %>');
+
 jQuery('#<%= dom_id @promotion_action %>').hide();
 jQuery('#<%= dom_id @promotion_action %>').fadeIn();
 initProductactionSourceField();

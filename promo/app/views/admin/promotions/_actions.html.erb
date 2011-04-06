@@ -1,10 +1,15 @@
 <fieldset id="action_fields">
   <legend><%= t(:promotion_actions) %></legend>
 
-  <%= form_for(@promotion, :url => object_url, :html => { :method => :put }) do |f| %>
+  <%= form_for(@promotion, :url => admin_promotion_path(@promotion), :html => { :method => :put }) do |f| %>
     <div id="actions" class="filter_list">
       <% if @promotion.actions.any? %>
-        <%= render :partial => 'promotion_action', :collection => @promotion.actions %>
+        <%#= render :partial => 'promotion_action', :collection => @promotion.actions, :locals => {:f => f} %>
+
+        <% f.fields_for :promotion_actions do |action_form| %>
+          <%= render 'admin/promotions/promotion_action', :action_form => action_form %>
+        <% end %>
+
       <% else %>
         <!-- <p><%= t('no_actions_added') %></p> -->
       <% end %>

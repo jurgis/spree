@@ -25,6 +25,13 @@ class Promotion < Activator
   alias_method :actions, :promotion_actions
   accepts_nested_attributes_for :promotion_actions
 
+  # TODO: This shouldn't be necessary with :autosave option but nested attribute updating of actions is broken without it
+  after_save :save_rules_and_actions
+  def save_rules_and_actions
+    (rules + actions).each &:save
+  end
+
+
   validates :name, :presence => true
 
   # TODO: Remove that after fix for https://rails.lighthouseapp.com/projects/8994/tickets/4329-has_many-through-association-does-not-link-models-on-association-save
