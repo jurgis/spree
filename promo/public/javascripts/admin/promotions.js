@@ -19,10 +19,7 @@ var initProductRuleSourceField = function(){
 
 };
 
-
-$(document).ready(function() {
-  initProductRuleSourceField();
-
+var initProductActionCalculatorFields = function(){
   $('.calculator-fields').each(function(){
     var $fields_container = $(this);
     var $type_select = $fields_container.find('.type-select');
@@ -43,7 +40,11 @@ $(document).ready(function() {
       }
     });
   });
+}
 
+$(document).ready(function() {
+  initProductRuleSourceField();
+  initProductRuleSourceField();
 });
 
 
