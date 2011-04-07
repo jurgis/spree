@@ -3,4 +3,9 @@ class Promotion::Actions::CreateAdjustment < PromotionAction
   calculated_adjustments
   alias credits promotion_credits
 
+  before_create do |a|
+    c = a.build_calculator
+    c.type = Promotion.calculators.first.to_s
+  end
+
 end
