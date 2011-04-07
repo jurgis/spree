@@ -15,34 +15,34 @@ describe Promotion do
     end
   end
 
-  # context "creating discounts" do
-  #   let(:order) { Order.new }
+  describe "#activate" do
+    before do
+      @action1 = mock_model(PromotionAction, :perform => true)
+      @action2 = mock_model(PromotionAction, :perform => true)
+      promotion.promotion_actions = [@action1, @action2]
+    end
 
-  #   before do
-  #     promotion.calculator = Calculator::FreeShipping.new
-  #   end
-
-  #   it "should not create a discount when order is not eligible" do
-  #     promotion.stub(:eligible? => false)
-  #     order.stub(:promotion_credit_exists? => nil)
-
-  #     promotion.create_discount(order)
-  #     order.promotion_credits.should have(0).item
-  #   end
-
-  #   it "should be able to create a discount on order" do
-  #     order.stub(:promotion_credit_exists? => nil)
-  #     order.stub(:ship_total => 5, :item_total => 50, :reload => nil)
-  #     promotion.stub(:code => "PROMO", :eligible? => true)
-  #     promotion.calculator.stub(:compute => 1000000)
-
-
-  #     attrs = {:amount => -50, :label => "#{I18n.t(:coupon)} (PROMO)", :source => promotion, :order => order }
-  #     PromotionCredit.should_receive(:create!).with(attrs)
-
-  #     promotion.create_discount(order)
-  #   end
-  # end
+    context "when eligible?" do
+      before do
+        promotion.stub(:eligible? => true)
+      end
+      it "should perform all actions" do
+        @action1.should_receive(:perform)
+        @action2.should_receive(:perform)
+        promotion.activate(:order => nil, :user => nil)
+      end
+    end
+    context "when not eligible?" do
+      before do
+        promotion.stub(:eligible? => false)
+      end
+      it "should not perform any actions" do
+        @action1.should_not_receive(:perform)
+        @action2.should_not_receive(:perform)
+        promotion.activate(:order => nil, :user => nil)
+      end
+    end
+  end
 
   context "#expired" do
     it "should not be exipired" do

@@ -10,7 +10,7 @@ class PromotionAction < ActiveRecord::Base
   # Updates the state of the order or performs some other action depending on the subclass
   # options will contain the payload from the event that activated the promotion. This will include
   # the key :user which allows user based actions to be performed in addition to actions on the order
-  def do(order, options = {})
+  def perform(order, options = {})
     raise 'do should be implemented in a sub-class of Promotion::PromotionAction'
   end
 
