@@ -44,7 +44,7 @@ var initProductActionCalculatorFields = function(){
 
 $(document).ready(function() {
   initProductRuleSourceField();
-  initProductRuleSourceField();
+  initProductActionCalculatorFields();
 });
 
 
