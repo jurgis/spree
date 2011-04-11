@@ -1,5 +1,11 @@
 class Activator < ActiveRecord::Base
 
+  EVENT_NAMES = [
+    'cart.add',
+    'order.contents_changed',
+    'user.signup'
+  ]
+
   scope :event_name_starts_with, lambda{|name| where('event_name like ?', "#{name}%") }
 
   def activate(payload)

@@ -129,7 +129,7 @@ module SpreePromo
           Calculator::FreeShipping
         ].each{|c_model|
           begin
-            Promotion.register_calculator(c_model) if c_model.table_exists?
+            Promotion::Actions::CreateAdjustment.register_calculator(c_model) if c_model.table_exists?
           rescue Exception => e
             $stderr.puts "Error registering promotion calculator #{c_model}"
           end

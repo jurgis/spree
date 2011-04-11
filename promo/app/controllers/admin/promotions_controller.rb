@@ -16,6 +16,6 @@ class Admin::PromotionsController < Admin::ResourceController
   end
 
   def load_data
-    @calculators = Promotion.calculators
+    @calculators = Promotion::Actions::CreateAdjustment.calculators
   end
 end
