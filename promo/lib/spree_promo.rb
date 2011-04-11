@@ -30,8 +30,8 @@ module SpreePromo
 
         # before_save :process_coupon_code, :if => "@coupon_code"
 
-        def promotion_credit_exists?(credit)
-          promotion_credits.reload.detect { |c| c.source_id == credit.id }
+        def promotion_credit_exists?(promotion)
+          promotion_credits.reload.detect { |c| c.source_id == promotion.id }
         end
 
         # def process_coupon_code

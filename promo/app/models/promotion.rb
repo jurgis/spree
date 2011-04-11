@@ -1,8 +1,4 @@
 class Promotion < Activator
-  has_many  :promotion_credits, :as => :source
-  calculated_adjustments
-  alias credits promotion_credits
-
 
   MATCH_POLICIES = %w(all any)
 
@@ -15,6 +11,8 @@ class Promotion < Activator
     alias_method field, "preferred_#{field}"
     alias_method "#{field}=", "preferred_#{field}="
   end
+
+  alias_method :combine?, :preferred_combine
 
 
   has_many :promotion_rules, :foreign_key => 'activator_id', :autosave => true
@@ -55,10 +53,6 @@ class Promotion < Activator
     !expired? && rules_are_eligible?(order, options = {})
   end
 
-  def credits_count
-    credits.with_order.count
-  end
-
   def rules_are_eligible?(order, options = {})
     return true if rules.none?
     if match_policy == 'all'
@@ -67,23 +61,6 @@ class Promotion < Activator
       rules.any?{|r| r.eligible?(order, options)}
     end
   end
-
-  def create_discount(order)
-    return if order.promotion_credit_exists?(self)
-    if eligible?(order) and amount = calculator.compute(order)
-      amount = order.item_total if amount > order.item_total
-      order.promotion_credits.reload.clear unless combine? and order.promotion_credits.all? { |credit| credit.source.combine? }
-      order.update!
-      PromotionCredit.create!({
-          :label => "#{I18n.t(:coupon)} (#{code})",
-          :source => self,
-          :amount => -amount.abs,
-          :order => order
-        })
-    end
-  end
-
-
 
   # Products assigned to all product rules
   def products
