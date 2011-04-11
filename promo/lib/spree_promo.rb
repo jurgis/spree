@@ -117,7 +117,6 @@ module SpreePromo
          Promotion::Rules::FirstOrder,
          Promotion::Rules::LandingPage,
          Promotion::Actions::CreateAdjustment,
-         Promotion::Actions::GiveStoreCredit,
          Promotion::Actions::CreateLineItems
         ].each &:register
 
