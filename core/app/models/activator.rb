@@ -7,6 +7,7 @@ class Activator < ActiveRecord::Base
   ]
 
   scope :event_name_starts_with, lambda{|name| where('event_name like ?', "#{name}%") }
+  scope :active, where('( starts_at IS NULL OR starts_at < ? ) AND ( expires_at IS NULL OR expires_at > ?)', Time.now, Time.now)
 
   def activate(payload)
   end
