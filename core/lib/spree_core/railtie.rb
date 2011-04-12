@@ -6,7 +6,6 @@ module SpreeCore
 
 
     # TODO: Is there a better way to make sure something within 'self.activate' only runs once in development?
-    @@first_activate = true
     def self.activate
 
       Spree::ThemeSupport::HookListener.subclasses.each do |hook_class|
@@ -53,21 +52,18 @@ module SpreeCore
 
       end
 
-
-      # Fetch matching activators for all Spree events
-      if @@first_activate
-        ActiveSupport::Notifications.subscribe(/^spree\./) do |*args|
-          name, start_time, end_time, id, payload = args
-          Activator.active.event_name_starts_with(name).each do |activator|
-            activator.activate(payload)
-          end
-        end
-      end
-
-      @@first_activate = false
     end
 
     config.to_prepare &method(:activate).to_proc
+
+    config.after_initialize do
+      ActiveSupport::Notifications.subscribe(/^spree\./) do |*args|
+        event_name, start_time, end_time, id, payload = args
+        Activator.active.event_name_starts_with(event_name).each do |activator|
+          activator.activate(payload)
+        end
+      end
+    end
 
   end
 end
