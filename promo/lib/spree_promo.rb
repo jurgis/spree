@@ -34,7 +34,7 @@ module SpreePromo
         # before_save :process_coupon_code, :if => "@coupon_code"
 
         def promotion_credit_exists?(promotion)
-          !! adjustments.promotion.reload.detect { |c| c.source_id == promotion.id }
+          !! adjustments.promotion.reload.detect { |credit| credit.originator.promotion.id == promotion.id }
         end
 
         # def process_coupon_code
@@ -48,22 +48,22 @@ module SpreePromo
           line_items.map {|li| li.variant.product}
         end
 
-        def update_totals(force_adjustment_recalculation=false)
-          self.payment_total = payments.completed.map(&:amount).sum
-          self.item_total = line_items.map(&:amount).sum
+        # def update_totals(force_adjustment_recalculation=false)
+        #   self.payment_total = payments.completed.map(&:amount).sum
+        #   self.item_total = line_items.map(&:amount).sum
 
-          check_promotion_eligibility
-          # process_automatic_promotions
+        #   check_promotion_eligibility
+        #   # process_automatic_promotions
 
-          if force_adjustment_recalculation
-            applicable_adjustments, adjustments_to_destroy = adjustments.partition{|a| a.applicable?}
-            self.adjustments = applicable_adjustments
-            adjustments_to_destroy.each(&:destroy)
-          end
+        #   if force_adjustment_recalculation
+        #     applicable_adjustments, adjustments_to_destroy = adjustments.partition{|a| a.applicable?}
+        #     self.adjustments = applicable_adjustments
+        #     adjustments_to_destroy.each(&:destroy)
+        #   end
 
-          self.adjustment_total = self.adjustments.map(&:amount).sum
-          self.total            = self.item_total   + self.adjustment_total
-        end
+        #   self.adjustment_total = self.adjustments.map(&:amount).sum
+        #   self.total            = self.item_total   + self.adjustment_total
+        # end
 
         # TODO: Remove promotions that are no longer eligible
         def check_promotion_eligibility
