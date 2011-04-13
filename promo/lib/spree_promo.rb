@@ -5,6 +5,11 @@ module SpreePromo
   class Engine < Rails::Engine
 
     def self.activate
+
+      Adjustment.class_eval do
+        scope :promotion, lambda { where('label LIKE ?', "#{I18n.t(:promotion)}%") }
+      end
+
       # put class_eval and other logic that depends on classes outside of the engine inside this block
       Product.class_eval do
         has_and_belongs_to_many :promotion_rules
@@ -23,15 +28,13 @@ module SpreePromo
 
       Order.class_eval do
 
-        has_many :promotion_credits, :conditions => "source_type='Promotion'", :dependent => :destroy
-
         attr_accessible :coupon_code
         attr_accessor :coupon_code
 
         # before_save :process_coupon_code, :if => "@coupon_code"
 
         def promotion_credit_exists?(promotion)
-          promotion_credits.reload.detect { |c| c.source_id == promotion.id }
+          !! adjustments.promotion.reload.detect { |c| c.source_id == promotion.id }
         end
 
         # def process_coupon_code
@@ -82,9 +85,10 @@ module SpreePromo
         #   end.compact
         # end
 
-        def eligible_automatic_promotions
-          @eligible_automatic_coupons ||= Promotion.automatic.select{|c| c.eligible?(self)}
-        end
+        # def eligible_automatic_promotions
+        #   @eligible_automatic_coupons ||= Promotion.automatic.select{|c| c.eligible?(self)}
+        # end
+
       end
 
 

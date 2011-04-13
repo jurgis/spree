@@ -13,14 +13,14 @@ class Promotion::Actions::CreateAdjustment < PromotionAction
     return if order.promotion_credit_exists?(promotion)
     if promotion.eligible?(order) and amount = calculator.compute(order)
       amount = order.item_total if amount > order.item_total
-      order.promotion_credits.reload.clear unless promotion.combine? and order.promotion_credits.all? { |credit| credit.source.combine? }
+      order.adjustments.promotion.reload.clear unless promotion.combine? and order.adjustments.promotion.all? { |credit| credit.source.combine? }
       order.update!
-      PromotionCredit.create!({
-          :label => "#{I18n.t(:coupon)} (#{promotion.code})",
+      Adjustment.create!({
+          :label => "#{I18n.t(:promotion)} (#{promotion.code})",
           :source => promotion,
           :amount => -amount.abs,
           :order => order
-        })
+        }).inspect
     end
   end
 
