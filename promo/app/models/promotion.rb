@@ -67,4 +67,16 @@ class Promotion < Activator
     @products ||= rules.of_type("Promotion::Rules::Product").map(&:products).flatten.uniq
   end
 
+  def expired?
+    super || (preferred_usage_limit.present? && credits_count >= preferred_usage_limit)
+  end
+
+  def credits
+    Adjustment.where(:originator_id => actions.map(&:id))
+  end
+
+  def credits_count
+    credits.count
+  end
+
 end

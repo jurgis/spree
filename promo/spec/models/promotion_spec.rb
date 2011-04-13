@@ -50,7 +50,7 @@ describe Promotion do
     end
 
     it "should be expired if usage limit is exceeded" do
-      promotion.usage_limit = 2
+      promotion.preferred_usage_limit = 2
       promotion.stub(:credits_count => 2)
       promotion.should be_expired
 

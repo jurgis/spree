@@ -1,7 +1,6 @@
 class Promotion::Actions::CreateAdjustment < PromotionAction
-  has_many  :promotion_credits, :as => :source
+
   calculated_adjustments
-  alias credits promotion_credits
 
   before_create do |a|
     c = a.build_calculator
@@ -26,10 +25,5 @@ class Promotion::Actions::CreateAdjustment < PromotionAction
       create_adjustment("#{I18n.t(:promotion)} (#{promotion.code})", order, order)
     end
   end
-
-  def credits_count
-    credits.with_order.count
-  end
-
 
 end
