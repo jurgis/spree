@@ -50,7 +50,7 @@ class Promotion < Activator
   end
 
   def eligible?(order, options = {})
-    !expired? && rules_are_eligible?(order, options = {})
+    !expired? && rules_are_eligible?(order, options) && coupon_is_eligible?(options[:coupon_code])
   end
 
   def rules_are_eligible?(order, options = {})
@@ -60,6 +60,10 @@ class Promotion < Activator
     else
       rules.any?{|r| r.eligible?(order, options)}
     end
+  end
+
+  def coupon_is_eligible?(code = nil)
+    event_name != 'spree.checkout.coupon_code_added' || code.to_s.strip.downcase == preferred_code.to_s.strip.downcase
   end
 
   # Products assigned to all product rules

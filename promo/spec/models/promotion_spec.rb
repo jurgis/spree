@@ -91,7 +91,7 @@ describe Promotion do
     end
   end
 
-  context "eligible?" do
+  context "#eligible?" do
     before { @order = Order.new }
 
     context "when it is expired" do
@@ -105,6 +105,20 @@ describe Promotion do
 
       specify { promotion.should be_eligible(@order) }
     end
+
+    context "when activated by coupon code event and a code is set" do
+      before {
+        promotion.event_name = 'spree.checkout.coupon_code_added'
+        promotion.preferred_code = 'ABC'
+      }
+      it "is false when payload doesn't include the matching code" do
+        promotion.should_not be_eligible(@order, {})
+      end
+      it "is true when payload includes the matching code" do
+        promotion.should be_eligible(@order, {:coupon_code => 'ABC'})
+      end
+    end
+
   end
 
   context "rules" do
