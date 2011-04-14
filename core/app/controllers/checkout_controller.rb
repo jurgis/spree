@@ -13,7 +13,7 @@ class CheckoutController < Spree::BaseController
 
       fire_event('spree.checkout.update')
       if @order.coupon_code.present?
-        fire_event('spree.checkout.coupon_added', :code => @order.coupon_code)
+        fire_event('spree.checkout.coupon_code_added', :coupon_code => @order.coupon_code)
       end
 
       if @order.next

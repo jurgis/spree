@@ -6,14 +6,14 @@
     <%= f.text_field :name %>
   <% end %>
 
-  <%= f.field_container :preferred_code do %>
-    <%= f.label :preferred_code, t(:code) %><br />
-    <%= f.text_field :preferred_code %>
-  <% end %>
-
   <%= f.field_container :event_name do %>
     <%= f.label :event_name, t(:event) %><br />
     <%= f.select :event_name, Activator::EVENT_NAMES.map{|name| [t("events.#{name}"), name] } %>
+  <% end %>
+
+  <%= f.field_container :preferred_code do %>
+    <%= f.label :preferred_code, t(:code) %><br />
+    <%= f.text_field :preferred_code %>
   <% end %>
 
   <%= f.field_container :description do %>

@@ -2,6 +2,7 @@ class Activator < ActiveRecord::Base
 
   EVENT_NAMES = [
     'spree.cart.add',
+    'spree.checkout.coupon_code_added',
     'spree.order.contents_changed',
     'spree.user.signup'
   ]

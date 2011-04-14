@@ -387,6 +387,8 @@ en:
     spree:
       cart:
         add: 'Add to cart'
+      checkout:
+        coupon_code_added: "Coupon code added"
       order:
         contents_changed: "Order contents changed"
       user:
