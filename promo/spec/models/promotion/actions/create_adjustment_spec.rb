@@ -6,7 +6,7 @@ describe Promotion::Actions::CreateAdjustment do
   # From promotion spec:
   context "#perform" do
     let(:order) { Factory(:order) }
-    let(:promotion) { Promotion.new }
+    let(:promotion) { Factory(:promotion) }
     let(:action) { Promotion::Actions::CreateAdjustment.new }
 
     before do
@@ -18,25 +18,25 @@ describe Promotion::Actions::CreateAdjustment do
 
     it "should not create a discount when order is not eligible" do
       promotion.stub(:eligible? => false)
-      order.stub(:promotion_credit_exists? => nil)
       action.perform(:order => order)
       promotion.credits_count.should == 0
     end
 
     it "should create a discount when order is eligible" do
-      order.stub(:promotion_credit_exists? => false)
       order.stub(:ship_total => 5, :item_total => 50, :reload => nil)
       promotion.stub(:eligible? => true)
-      promotion.code = 'PROMO'
       action.calculator.stub(:compute => 1000000)
 
-      attrs = {
-        :amount => -50,
-        :label => "#{I18n.t(:coupon)} (PROMO)",
-        :source => promotion,
-        :order => order
-      }
+      action.perform(:order => order)
+      promotion.credits_count.should == 1
+    end
 
+    it "should not create a discount when order already has one from this promotion" do
+      order.stub(:ship_total => 5, :item_total => 50, :reload => nil)
+      promotion.stub(:eligible? => true)
+      action.calculator.stub(:compute => 1000000)
+
+      action.perform(:order => order)
       action.perform(:order => order)
       promotion.credits_count.should == 1
     end
