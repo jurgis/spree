@@ -18,4 +18,7 @@ class Promotion::Actions::CreateAdjustment < PromotionAction
     end
   end
 
+  delegate :eligible?, :to => :promotion
+
+
 end
