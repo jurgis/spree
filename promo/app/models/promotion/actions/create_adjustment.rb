@@ -10,7 +10,7 @@ class Promotion::Actions::CreateAdjustment < PromotionAction
   def perform(options = {})
     return unless order = options[:order]
     return if order.promotion_credit_exists?(promotion)
-    if promotion.eligible?(order) and amount = calculator.compute(order)
+    if amount = calculator.compute(order)
       amount = order.item_total if amount > order.item_total
       order.adjustments.promotion.reload.clear unless promotion.combine? and order.adjustments.promotion.all? { |credit| credit.originator.promotion.combine? }
       order.update!
