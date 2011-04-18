@@ -132,7 +132,11 @@ class Order < ActiveRecord::Base
   # This method should never do anything to the Order that results in a save call on the object (otherwise you will end
   # up in an infinite recursion as the associations try to save and then in turn try to call +update!+ again.)
   def update!
+    puts '='*100
+    puts '='*100
     update_totals
+    puts 'update!'
+    puts "  item_total = #{item_total}"
     update_payment_state
 
     # give each of the shipments a chance to update themselves

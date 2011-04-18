@@ -20,5 +20,4 @@ class Promotion::Actions::CreateAdjustment < PromotionAction
 
   delegate :eligible?, :to => :promotion
 
-
 end
