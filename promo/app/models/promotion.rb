@@ -1,5 +1,6 @@
 class Promotion < Activator
 
+
   MATCH_POLICIES = %w(all any)
 
   preference :combine, :boolean, :default => false
@@ -31,6 +32,8 @@ class Promotion < Activator
 
 
   validates :name, :presence => true
+  validates :preferred_code, :presence => true, :if => lambda{|r| r.event_name == 'spree.checkout.coupon_code_added' }
+
 
   # TODO: Remove that after fix for https://rails.lighthouseapp.com/projects/8994/tickets/4329-has_many-through-association-does-not-link-models-on-association-save
   # is provided
@@ -72,7 +75,11 @@ class Promotion < Activator
   end
 
   def expired?
-    super || (preferred_usage_limit.present? && credits_count >= preferred_usage_limit)
+    super || usage_limit_exceeded?
+  end
+
+  def usage_limit_exceeded?
+    preferred_usage_limit.present? && credits_count >= preferred_usage_limit
   end
 
   def credits
