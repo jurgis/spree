@@ -439,7 +439,10 @@ describe Order do
       before do
         Factory(:adjustment, :order => order, :amount => 10)
         Factory(:adjustment, :order => order, :amount => 5)
-        Factory(:adjustment, :order => order, :amount => -2, :eligible => false)
+        a = Factory(:adjustment, :order => order, :amount => -2, :eligible => false)
+        a.update_attribute_without_callbacks(:eligible, false)
+        order.stub(:update_adjustments, nil) # So the last adjustment remains ineligible
+        order.adjustments.reload
       end
       it "should set adjustment_total to the sum of the eligible adjustment amounts" do
         order.update!
