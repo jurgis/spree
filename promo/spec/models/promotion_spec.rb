@@ -2,11 +2,13 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Promotion do
   let(:promotion) { Promotion.new }
+  # let(:promotion) { Factory(:promotion) }
 
   describe "#save" do
     let(:promotion_valid) { Promotion.new :name => "A promotion", :code => "XXXX" }
 
     context "when is invalid" do
+      before { promotion.name = nil }
       it { promotion.save.should be_false }
     end
 
@@ -92,7 +94,10 @@ describe Promotion do
   end
 
   context "#eligible?" do
-    before { @order = Order.new }
+    let(:promotion) { Factory(:promotion) }
+    before {
+      @order = Factory(:order)
+    }
 
     context "when it is expired" do
       before { promotion.stub(:expired? => true) }
@@ -117,6 +122,17 @@ describe Promotion do
       it "is true when payload includes the matching code" do
         promotion.should be_eligible(@order, {:coupon_code => 'ABC'})
       end
+    end
+
+    context "when a coupon code has already resulted in an adustment on the order" do
+      before {
+        promotion.preferred_code = 'ABC'
+        promotion.event_name = 'spree.checkout.coupon_code_added'
+        action = Promotion::Actions::CreateAdjustment.create!(:promotion => promotion)
+        action.calculator = Calculator::FlatRate.create!(:calculable => action)
+        action.perform(:order => @order)
+      }
+      specify { promotion.should be_eligible(@order) }
     end
 
   end
