@@ -36,13 +36,6 @@ class Adjustment < ActiveRecord::Base
   after_save { order.update! }
   after_destroy { order.update! }
 
-  # Checks if adjustment is applicable for the order. Should return _true_ if adjustment should be preserved and
-  # _false_ if removed. Default behaviour is to preserve adjustment if amount is present and non 0.  Exceptions
-  # are made if the adjustment is considered +mandatory+.
-  def applicable?
-    mandatory || amount != 0
-  end
-
   # Update the boolean _eligible_ attribute which deterimes which adjustments count towards the order's
   # adjustment_total.
   def set_eligibility

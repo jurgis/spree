@@ -31,67 +31,15 @@ module SpreePromo
         attr_accessible :coupon_code
         attr_accessor :coupon_code
 
-        # before_save :process_coupon_code, :if => "@coupon_code"
-
         def promotion_credit_exists?(promotion)
           !! adjustments.promotion.reload.detect { |credit| credit.originator.promotion.id == promotion.id }
         end
-
-        # def process_coupon_code
-        #   coupon = Promotion.find(:first, :conditions => ["UPPER(code) = ?", @coupon_code.upcase])
-        #   if coupon
-        #     coupon.create_discount(self)
-        #   end
-        # end
 
         def products
           line_items.map {|li| li.variant.product}
         end
 
-        # def update_totals(force_adjustment_recalculation=false)
-        #   self.payment_total = payments.completed.map(&:amount).sum
-        #   self.item_total = line_items.map(&:amount).sum
-
-        #   check_promotion_eligibility
-        #   # process_automatic_promotions
-
-        #   if force_adjustment_recalculation
-        #     applicable_adjustments, adjustments_to_destroy = adjustments.partition{|a| a.applicable?}
-        #     self.adjustments = applicable_adjustments
-        #     adjustments_to_destroy.each(&:destroy)
-        #   end
-
-        #   self.adjustment_total = self.adjustments.map(&:amount).sum
-        #   self.total            = self.item_total   + self.adjustment_total
-        # end
-
-        # TODO: Remove promotions that are no longer eligible
-        def check_promotion_eligibility
-        end
-
-        # def process_automatic_promotions
-        #   #promotion_credits.reload.clear
-        #   eligible_automatic_promotions.each do |coupon|
-        #     # can't use coupon.create_discount as it re-saves the order causing an infinite loop
-        #     if amount = coupon.calculator.compute(line_items)
-        #       amount = item_total if amount > item_total
-        #       promotion_credits.reload.clear unless coupon.combine? and promotion_credits.all? { |credit| credit.adjustment_source.combine? }
-        #       promotion_credits.create!({
-        #           :source => coupon,
-        #           :amount => -amount.abs,
-        #           :label => coupon.description
-        #         })
-        #     end
-        #   end.compact
-        # end
-
-        # def eligible_automatic_promotions
-        #   @eligible_automatic_coupons ||= Promotion.automatic.select{|c| c.eligible?(self)}
-        # end
-
       end
-
-
 
       # Keep a record ot all static page paths visited for promotions that require them
       ContentController.class_eval do
@@ -108,9 +56,6 @@ module SpreePromo
           {:user => current_user, :order => current_order, :visited_paths => session[:visited_paths]}
         end
       end
-
-
-
 
 
       if File.basename( $0 ) != "rake"
