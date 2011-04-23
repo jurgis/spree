@@ -18,6 +18,10 @@ class Promotion::Actions::CreateAdjustment < PromotionAction
     end
   end
 
+  def compute_amount(calculable)
+    super.abs * -1
+  end
+
   delegate :eligible?, :to => :promotion
 
 end
