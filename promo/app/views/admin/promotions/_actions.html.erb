@@ -6,7 +6,7 @@
       <% if @promotion.actions.any? %>
         <%#= render :partial => 'promotion_action', :collection => @promotion.actions, :locals => {:f => f} %>
 
-        <% f.fields_for :promotion_actions do |action_form| %>
+        <%= f.fields_for :promotion_actions do |action_form| %>
           <%= render 'admin/promotions/promotion_action', :action_form => action_form %>
         <% end %>
 

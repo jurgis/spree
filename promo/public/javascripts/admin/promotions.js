@@ -25,11 +25,11 @@ var initProductActionCalculatorFields = function(){
     var $type_select = $fields_container.find('.type-select');
     var $settings = $fields_container.find('.settings');
     var $warning = $fields_container.find('.warning');
-    var $originalType = $type_select.val();
+    var originalType = $type_select.val();
 
     $warning.hide();
     $type_select.change(function(){
-      if( $(this).val() == $originalType ){
+      if( $(this).val() == originalType ){
         $warning.hide();
         $settings.show();
         $settings.find('input').removeAttr('disabled');

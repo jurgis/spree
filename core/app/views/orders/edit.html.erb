@@ -26,12 +26,16 @@
           </div>
         </div>
 
+        <p>
+          Coupon code: <%= order_form.text_field :coupon_code %>
+        </p>
+
         <p><%=link_to t("continue_shopping"), products_path, :class => 'button continue' %></p>
 
       <% end %>
     <% end %>
   <% end %>
-  
+
   <%= form_tag empty_cart_path, :method => :put do %>
     <p id="clear_cart_link">
       <input type="submit" value="<%= t('empty_cart') %>" class="button" />
@@ -39,3 +43,9 @@
   <% end %>
 
 <% end %>
+
+<ul>
+  <% for adjustment in @order.adjustments %>
+    <li><%= adjustment.label %> - <%= adjustment.amount %> - <%= adjustment.eligible? ? 'Eligible' : 'Not eligible' %></li>
+  <% end %>
+</ul>

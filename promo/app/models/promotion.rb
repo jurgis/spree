@@ -15,7 +15,6 @@ class Promotion < Activator
 
   alias_method :combine?, :preferred_combine
 
-
   has_many :promotion_rules, :foreign_key => 'activator_id', :autosave => true
   alias_method :rules, :promotion_rules
   accepts_nested_attributes_for :promotion_rules
@@ -81,7 +80,7 @@ class Promotion < Activator
   end
 
   def usage_limit_exceeded?
-    preferred_usage_limit.present? && credits_count >= preferred_usage_limit
+    preferred_usage_limit.present? && preferred_usage_limit > 0 && credits_count >= preferred_usage_limit
   end
 
   def credits
